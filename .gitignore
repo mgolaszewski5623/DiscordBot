@@ -1,6 +1,7 @@
 # my .gitignote file configuration (start)
 
 **/Data/*
+Todo.txt
 
 # my .gitignote file configuration (end)
 
