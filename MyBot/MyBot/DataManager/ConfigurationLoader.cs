@@ -18,7 +18,14 @@ namespace MyBot.DataManager
             var configuration = System.Text.Json.JsonSerializer.Deserialize<BotConfiguration>(json);
             if(configuration == null || string.IsNullOrWhiteSpace(configuration.Token) || string.IsNullOrWhiteSpace(configuration.Prefix))
                 throw new MyBotException("Configuration file is invalid or missing required fields.");
+            SetConfiguration(configuration);
             return configuration;
+        }
+
+        private static void SetConfiguration(BotConfiguration configuration)
+        {
+            WarningManager.MaxWarnings = configuration.MaxWarnings;
+            WarningManager.WarningDuration = configuration.WarningDurationDays;
         }
     }
 }

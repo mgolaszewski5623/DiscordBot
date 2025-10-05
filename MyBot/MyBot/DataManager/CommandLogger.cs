@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyBot.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,8 @@ namespace MyBot.DataManager
 
         public static async Task LogCommand(SocketMessage message)
         {
-            CreateLogDirectory();
-            var logFile = $"{logPath}{SanitizeFileName(GetLogFile(message))}";
-
+            PathExtensions.CreateLogDirectory(logPath);
+            var logFile = Path.Combine(logPath, GetLogFile(message).SanitizeFilePath());
             var user = message.Author.Username;
             var userId = message.Author.Id;
             var channel = (message.Channel as SocketTextChannel)?.Name ?? "DM";
@@ -26,17 +26,11 @@ namespace MyBot.DataManager
             await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
         }
 
-        private static void CreateLogDirectory()
-        {
-            if(!Directory.Exists(logPath))
-                Directory.CreateDirectory(logPath);
-        }
-
         private static string GetLogFile(SocketMessage message)
         {
             if(message.Channel is SocketTextChannel textChannel)
             {
-                string serverName = textChannel.Guild.Name.Replace(" ", "_");
+                string serverName = textChannel.Guild.Name;
                 string serverId = textChannel.Guild.Id.ToString();
                 return $"S_{serverName}_{serverId}_commands.log";
             }
@@ -47,13 +41,6 @@ namespace MyBot.DataManager
                 return $"DM_{userName}_{userId}_commands.log";
             }
             return "UnknownChannel_commands.log";
-        }
-
-        private static string SanitizeFileName(string name)
-        {
-            foreach (char c in Path.GetInvalidFileNameChars())
-                name = name.Replace(c, FLOOR_CHAR);
-            return name;
         }
     }
 }
