@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBot.Configurations
+namespace MyBot.DataManager
 {
     public static class ConfigurationLoader
     {

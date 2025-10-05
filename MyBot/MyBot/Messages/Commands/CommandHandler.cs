@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyBot.DataManager;
 using MyBot.Exceptions;
 using MyBot.Messages.Commands.ParametrizedCommands;
 using MyBot.Messages.Commands.SimpleCommands;
@@ -49,6 +50,7 @@ namespace MyBot.Messages.Commands
                     await HandleSingleCommand(message);
                 else
                     await HandleParamCommand(message, messageParts);
+                CommandLogger.LogCommand(message).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {

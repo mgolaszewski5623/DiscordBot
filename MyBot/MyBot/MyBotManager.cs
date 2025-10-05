@@ -1,6 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using MyBot.Configurations;
+using MyBot.DataManager;
 using MyBot.Extensions;
 using MyBot.Messages;
 using System;
