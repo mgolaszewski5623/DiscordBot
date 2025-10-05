@@ -11,6 +11,8 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
     {
         public string Name { get; }
 
+        public string Description { get; }
+
         public Task Execute(SocketMessage message, string[] parameters);
     }
 }

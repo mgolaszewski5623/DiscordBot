@@ -26,12 +26,12 @@ namespace MyBot.Messages.Commands
             new QuoteCommand(),
             new ServerInfoCommand(),
             new TimeCommand(),
-            // Todo: Add instances of classes implementing ISingleCommand here
         };
 
         private readonly List<IParametrizedCommand> parametrizedCommands = new()
         {
-            // Todo: Add instances of classes implementing IParamCommand here
+            new ClearCommand(),
+            new UserInfoCommand(),
         };
 
         public CommandHandler(string prefix)
