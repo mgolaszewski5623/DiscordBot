@@ -33,10 +33,10 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         private async Task<string> GetRandomJokeAsync()
         {
-            using (var httpClient = new HttpClient())
+            using (HttpClient httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync(JOKE_API_URL);
-                var joke = JsonSerializer.Deserialize<JokeResponse>(
+                string response = await httpClient.GetStringAsync(JOKE_API_URL);
+                JokeResponse? joke = JsonSerializer.Deserialize<JokeResponse>(
                     response,
                     new JsonSerializerOptions
                     {

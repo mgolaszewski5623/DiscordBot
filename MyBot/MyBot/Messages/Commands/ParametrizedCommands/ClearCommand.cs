@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using MyBot.Exceptions;
 using MyBot.Extensions;
@@ -20,11 +21,11 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
         {
             try
             {
-                var channel = message.Channel as SocketTextChannel;
+                SocketTextChannel? channel = message.Channel as SocketTextChannel;
                 int count = ValidateClearCommand(message, args);
-                var messages = await channel.GetMessagesAsync(count + 1).FlattenAsync();
+                IEnumerable<IMessage> messages = await channel.GetMessagesAsync(count + 1).FlattenAsync();
                 await channel.DeleteMessagesAsync(messages);
-                var confirmationMessage = await channel.SendMessageAsync($"Deleted {count} messages.");
+                RestUserMessage confirmationMessage = await channel.SendMessageAsync($"Deleted {count} messages.");
                 await Task.Delay(1000);
                 await confirmationMessage.DeleteAsync();
             }

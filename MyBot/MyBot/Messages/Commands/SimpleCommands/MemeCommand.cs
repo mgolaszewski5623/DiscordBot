@@ -32,10 +32,10 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         private async Task SendMemeAsync(SocketMessage message)
         {
-            using (var httpClient = new HttpClient())
+            using (HttpClient httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync(MEME_API_URL);
-                var meme = JsonSerializer.Deserialize<MemeResponse>(
+                string response = await httpClient.GetStringAsync(MEME_API_URL);
+                MemeResponse? meme = JsonSerializer.Deserialize<MemeResponse>(
                     response,
                     new JsonSerializerOptions
                     {
@@ -43,7 +43,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
                     });
                 if (meme == null)
                     throw new MyBotException("Failed to parse meme response");
-                var embed = new Discord.EmbedBuilder()
+                Discord.Embed embed = new Discord.EmbedBuilder()
                     .WithTitle(meme.Title)
                     .WithUrl(meme.PostLink)
                     .WithImageUrl(meme.Url)

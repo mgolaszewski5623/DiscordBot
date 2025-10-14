@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using MyBot.DataManager;
 using MyBot.Extensions;
 using MyBot.Messages;
+using MyBot.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +21,11 @@ namespace MyBot
         {
             try
             {
-                var configurationData = ConfigurationLoader.LoadConfiguration();
-                var token = configurationData.Token;
-                var prefix = configurationData.Prefix;
+                BotConfiguration configurationData = ConfigurationLoader.LoadConfiguration();
+                string token = configurationData.Token;
+                string prefix = configurationData.Prefix;
 
-                var discordSocketConfig = SetDiscordSocketConfig();
+                DiscordSocketConfig discordSocketConfig = SetDiscordSocketConfig();
                 _client = new DiscordSocketClient(discordSocketConfig);
                 _messageHandler = new MessageHandler(prefix);
 

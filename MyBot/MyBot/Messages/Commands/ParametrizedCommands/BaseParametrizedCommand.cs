@@ -29,7 +29,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
                 await SendMessage(message, "This command can only be used in text channels.");
                 return;
             }
-            var messageToSend = CreateMessageToSend(message, parameters);
+            string messageToSend = CreateMessageToSend(message, parameters);
             await SendMessage(message, messageToSend);
         }
 

@@ -21,8 +21,8 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
                 return "Invalid number of arguments.";
             try
             {
-                var user = message.MentionedUsers.First();
-                var messageToSend = $"""
+                SocketUser user = message.MentionedUsers.First();
+                string messageToSend = $"""
                     User Info:
                     Username: {user.Username}
                     Discriminator: {user.Discriminator}

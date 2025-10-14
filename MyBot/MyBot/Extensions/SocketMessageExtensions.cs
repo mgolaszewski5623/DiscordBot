@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MyBot.Extensions
         {
             if(message.Author is not SocketGuildUser user)
                 return false;
-            var permissions = user.GuildPermissions;
+            GuildPermissions permissions = user.GuildPermissions;
             return permissions.Administrator || permissions.ManageMessages || permissions.KickMembers || permissions.BanMembers;
         }
     }

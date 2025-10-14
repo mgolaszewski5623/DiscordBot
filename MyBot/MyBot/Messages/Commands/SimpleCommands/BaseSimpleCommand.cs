@@ -30,7 +30,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
                 await SendMessage(message, "This command can only be used in text channels.");
                 return;
             }
-            var messageToSend = CreateMessageToSend(message);
+            string messageToSend = CreateMessageToSend(message);
             await SendMessage(message, messageToSend);
         }
 

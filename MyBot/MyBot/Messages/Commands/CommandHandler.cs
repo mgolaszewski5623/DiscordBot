@@ -46,7 +46,7 @@ namespace MyBot.Messages.Commands
             try
             {
                 RejestrCommand();
-                var messageParts = message.Content.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string[] messageParts = message.Content.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 if (messageParts.Length == 1)
                     await HandleSingleCommand(message);
                 else
@@ -66,7 +66,7 @@ namespace MyBot.Messages.Commands
 
         private async Task HandleSingleCommand(SocketMessage message)
         {
-            var command = simpleCommands.FirstOrDefault(c => $"{prefix}{c.Name}" == message.Content);
+            ISimpleCommand? command = simpleCommands.FirstOrDefault(c => $"{prefix}{c.Name}" == message.Content);
             if (command != null)
                 await command.Execute(message);
             else
@@ -75,9 +75,9 @@ namespace MyBot.Messages.Commands
 
         private async Task HandleParamCommand(SocketMessage message, string[] messageParts)
         {
-            var commandName = messageParts[0];
-            var args = messageParts.Skip(1).ToArray();
-            var command = parametrizedCommands.FirstOrDefault(c => $"{prefix}{c.Name}" == commandName);
+            string commandName = messageParts[0];
+            string[] args = messageParts.Skip(1).ToArray();
+            IParametrizedCommand? command = parametrizedCommands.FirstOrDefault(c => $"{prefix}{c.Name}" == commandName);
             if (command != null)
                 await command.Execute(message, args);
             else

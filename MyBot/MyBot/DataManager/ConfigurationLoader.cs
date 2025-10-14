@@ -14,8 +14,8 @@ namespace MyBot.DataManager
         {
             if(!File.Exists(path))
                 throw new MyBotException($"Configuration file not found at path: {path}");
-            var json = File.ReadAllText(path);
-            var configuration = System.Text.Json.JsonSerializer.Deserialize<BotConfiguration>(json);
+            string json = File.ReadAllText(path);
+            BotConfiguration? configuration = System.Text.Json.JsonSerializer.Deserialize<BotConfiguration>(json);
             if(configuration == null || string.IsNullOrWhiteSpace(configuration.Token) || string.IsNullOrWhiteSpace(configuration.Prefix))
                 throw new MyBotException("Configuration file is invalid or missing required fields.");
             SetConfiguration(configuration);

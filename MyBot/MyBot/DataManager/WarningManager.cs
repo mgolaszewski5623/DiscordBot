@@ -29,7 +29,7 @@ namespace MyBot.DataManager
                     warnings = JsonSerializer.Deserialize<List<Warning>>(json) ?? new();
             }
             warnings.Add(warning);
-            var options = new JsonSerializerOptions { WriteIndented = true };
+            JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
             string updatedJson = JsonSerializer.Serialize(warnings, options);
             await File.WriteAllTextAsync(warningFile, updatedJson);
         }
@@ -41,11 +41,11 @@ namespace MyBot.DataManager
             if(!File.Exists(warningFile))
                 return;
             string json = await File.ReadAllTextAsync(warningFile);
-            var warnings = JsonSerializer.Deserialize<List<Warning>>(json) ?? new List<Warning>();
-            var cutoffData = DateTime.UtcNow.AddDays(-WarningDuration);
+            List<Warning> warnings = JsonSerializer.Deserialize<List<Warning>>(json) ?? new List<Warning>();
+            DateTime cutoffData = DateTime.UtcNow.AddDays(-WarningDuration);
             warnings = warnings.Where(w => w.Date >= cutoffData).ToList();
 
-            var options = new JsonSerializerOptions { WriteIndented = true };
+            JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
             string updatedJson = JsonSerializer.Serialize(warnings, options);
             await File.WriteAllTextAsync(warningFile, updatedJson);
         }
@@ -64,7 +64,7 @@ namespace MyBot.DataManager
 
         public static async Task<bool> HasReachedMaxWarnings(ulong guildId, string guildName, ulong userId)
         {
-            var warnings = await GetWarnings(guildId, guildName, userId);
+            List<Warning> warnings = await GetWarnings(guildId, guildName, userId);
             return warnings.Count > MaxWarnings;
         }
 

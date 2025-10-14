@@ -21,8 +21,8 @@ namespace MyBot.Messages.Commands.SimpleCommands
         {
             if (message.Channel is not SocketGuildChannel guildChannel)
                 return "This command can only be used in a server text channel.";
-            var guild = guildChannel.Guild;
-            var sb = new StringBuilder();
+            SocketGuild guild = guildChannel.Guild;
+            StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Server Name: {guild.Name}");
             sb.AppendLine($"Total Members: {guild.MemberCount}");
             sb.AppendLine($"Created On: {guild.CreatedAt.UtcDateTime.ToString("f")} UTC");

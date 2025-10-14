@@ -16,11 +16,11 @@ namespace MyBot.DataManager
         public static async Task LogCommand(SocketMessage message)
         {
             PathExtensions.CreateLogDirectory(logPath);
-            var logFile = Path.Combine(logPath, GetLogFile(message).SanitizeFilePath());
-            var user = message.Author.Username;
-            var userId = message.Author.Id;
-            var channel = (message.Channel as SocketTextChannel)?.Name ?? "DM";
-            var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string logFile = Path.Combine(logPath, GetLogFile(message).SanitizeFilePath());
+            string user = message.Author.Username;
+            ulong userId = message.Author.Id;
+            string channel = (message.Channel as SocketTextChannel)?.Name ?? "DM";
+            string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             string logLine = $"[{time}] {user}({userId}) in {channel} : {message.Content}";
             await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);

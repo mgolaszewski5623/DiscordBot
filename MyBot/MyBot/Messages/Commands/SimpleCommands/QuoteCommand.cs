@@ -1,6 +1,5 @@
 ﻿using MyBot.Exceptions;
 using MyBot.Extensions;
-using MyBot.Messages.Commands.SimpleCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands
+namespace MyBot.Messages.Commands.SimpleCommands
 {
     internal class QuoteCommand : BaseSimpleCommand
     {
@@ -35,18 +34,18 @@ namespace MyBot.Messages.Commands
 
         private async Task<string> GetRandomQuoteAsync()
         {
-            using (var httpClient = new HttpClient())
+            using (HttpClient httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync(QUOTE_API_URL).ConfigureAwait(false);
+                string response = await httpClient.GetStringAsync(QUOTE_API_URL).ConfigureAwait(false);
 
-                var quotes = JsonSerializer.Deserialize<List<QuoteResponse>>(
+                List<QuoteResponse>? quotes = JsonSerializer.Deserialize<List<QuoteResponse>>(
                     response,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 if (quotes == null || quotes.Count == 0)
                     throw new MyBotException("Failed to parse quote response");
 
-                var q = quotes[0];
+                QuoteResponse q = quotes[0];
                 return $"💡 \"{q.Q}\" — {q.A}";
             }
         }

@@ -15,7 +15,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         protected override string CreateMessageToSend(SocketMessage message)
         {
-            var commandsList = new StringBuilder();
+            StringBuilder commandsList = new StringBuilder();
             commandsList.AppendLine("Here are the available commands:");
             commandsList.AppendLine("!hello - Sends a greeting message to the user.");
             commandsList.AppendLine("!love - Sends a love message.");

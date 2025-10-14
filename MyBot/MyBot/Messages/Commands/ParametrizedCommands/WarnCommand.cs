@@ -27,7 +27,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
             if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
                 return $"Please mention a valid user to warn.";
             string reason = parameters.Length > 1 ? string.Join(" ", parameters.Skip(1)) : "No reason provided";
-            var warning = new Warning
+            Warning warning = new Warning
             {
                 GuildId = targetUser.Guild.Id,
                 GuildName = targetUser.Guild.Name,
