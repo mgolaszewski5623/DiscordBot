@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.ParametrizedCommands
 {
-    internal class WarnCommand : BaseParametrizedCommand
+    internal class KickCommand : BaseParametrizedCommand
     {
-        public override string Name => "warn";
+        public override string Name => "kick";
 
-        public override string Description => "Issues a warning to a user. Usage: !warn <user> <reason>";
+        public override string Description => "Kicks a user from the server. Usage: !kick <user> <reason>";
 
         protected override bool CanBotSendMessage => false;
 
@@ -22,33 +22,36 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override string CreateMessageToSend(SocketMessage message, string[] parameters)
         {
-            if(!message.AuthorHasModPermission())
-                return "You do not have permission to issue warnings.";
+            if (!message.AuthorHasModPermission())
+                return "You do not have permission to kick user.";
             if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
-                return $"Please mention a valid user to warn.";
+                return $"Please mention a valid user to kick.";
             string reason = parameters.Length > 1 ? string.Join(" ", parameters.Skip(1)) : "No reason provided";
-            WarningModel warning = new WarningModel
+            KickModel kick = new KickModel
             {
                 Guild = targetUser.Guild,
-				GuildId = targetUser.Guild.Id,
+                GuildId = targetUser.Guild.Id,
                 GuildName = targetUser.Guild.Name,
                 TargetUserId = targetUser.Id,
                 ModeratorId = message.Author.Id,
                 Reason = reason,
                 Date = DateTime.UtcNow
             };
-            WarningManager.SaveWarning(warning).GetAwaiter().GetResult();
-            ServeWarning(warning);
-            return $"⚠️ {targetUser.Mention} dostał ostrzeżenie: **{reason}**";
+            return ServeKick(kick);
         }
 
-        private void ServeWarning(WarningModel warning)
+        private string ServeKick(KickModel kick)
         {
-            if (WarningManager.HasReachedMaxWarnings(warning.GuildId, warning.GuildName, warning.TargetUserId).GetAwaiter().GetResult())
+            try
             {
-                KickModel kick = warning.ToKick();
                 KickManager.KickUser(kick).GetAwaiter().GetResult();
-			}
+                return $"👢 {kick.TargetUserId} has been kicked. Reason: **{kick.Reason}**";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error kicking user: {ex.GetCompleteMessage()}");
+                return $"Failed to kick user:";
+            }
         }
     }
 }

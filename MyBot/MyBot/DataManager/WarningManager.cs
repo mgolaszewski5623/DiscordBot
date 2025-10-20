@@ -17,16 +17,16 @@ namespace MyBot.DataManager
 
         private const string warningPath = "Data/Warnings/";
 
-        public static async Task SaveWarning(Warning warning)
+        public static async Task SaveWarning(WarningModel warning)
         {
             await RemoveOldWarnings(warning.GuildId, warning.GuildName);
             string warningFile = Path.Combine(warningPath, GetGuildFile(warning.GuildId, warning.GuildName));
-            List<Warning> warnings = new();
+            List<WarningModel> warnings = new();
             if(File.Exists(warningFile))
             {
                 string json = await File.ReadAllTextAsync(warningFile);
                 if(!string.IsNullOrWhiteSpace(json))
-                    warnings = JsonSerializer.Deserialize<List<Warning>>(json) ?? new();
+                    warnings = JsonSerializer.Deserialize<List<WarningModel>>(json) ?? new();
             }
             warnings.Add(warning);
             JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
@@ -41,7 +41,7 @@ namespace MyBot.DataManager
             if(!File.Exists(warningFile))
                 return;
             string json = await File.ReadAllTextAsync(warningFile);
-            List<Warning> warnings = JsonSerializer.Deserialize<List<Warning>>(json) ?? new List<Warning>();
+            List<WarningModel> warnings = JsonSerializer.Deserialize<List<WarningModel>>(json) ?? new List<WarningModel>();
             DateTime cutoffData = DateTime.UtcNow.AddDays(-WarningDuration);
             warnings = warnings.Where(w => w.Date >= cutoffData).ToList();
 
@@ -50,21 +50,21 @@ namespace MyBot.DataManager
             await File.WriteAllTextAsync(warningFile, updatedJson);
         }
 
-        public static async Task<List<Warning>> GetWarnings(ulong guildId, string guildName, ulong userId)
+        public static async Task<List<WarningModel>> GetWarnings(ulong guildId, string guildName, ulong userId)
         {
             await RemoveOldWarnings(guildId, guildName);
             string warningFile = Path.Combine(warningPath, GetGuildFile(guildId, guildName));
             if(!File.Exists(warningFile))
-                return new List<Warning>();
+                return new List<WarningModel>();
             string json = await File.ReadAllTextAsync(warningFile);
-            return JsonSerializer.Deserialize<List<Warning>>(json)?
-                .Where(w => w.WarnedUserId == userId)
-                .ToList() ?? new List<Warning>();
+            return JsonSerializer.Deserialize<List<WarningModel>>(json)?
+                .Where(w => w.TargetUserId == userId)
+                .ToList() ?? new List<WarningModel>();
         }
 
         public static async Task<bool> HasReachedMaxWarnings(ulong guildId, string guildName, ulong userId)
         {
-            List<Warning> warnings = await GetWarnings(guildId, guildName, userId);
+            List<WarningModel> warnings = await GetWarnings(guildId, guildName, userId);
             return warnings.Count > MaxWarnings;
         }
 
