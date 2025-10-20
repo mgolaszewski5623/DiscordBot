@@ -19,19 +19,26 @@ namespace MyBot.DataManager
 
         public static async Task SaveWarning(WarningModel warning)
         {
-            await RemoveOldWarnings(warning.GuildId, warning.GuildName);
-            string warningFile = Path.Combine(warningPath, GetGuildFile(warning.GuildId, warning.GuildName));
-            List<WarningModel> warnings = new();
-            if(File.Exists(warningFile))
+            try
             {
-                string json = await File.ReadAllTextAsync(warningFile);
-                if(!string.IsNullOrWhiteSpace(json))
-                    warnings = JsonSerializer.Deserialize<List<WarningModel>>(json) ?? new();
+                await RemoveOldWarnings(warning.GuildId, warning.GuildName);
+                string warningFile = Path.Combine(warningPath, GetGuildFile(warning.GuildId, warning.GuildName));
+                List<WarningModel> warnings = new();
+                if (File.Exists(warningFile))
+                {
+                    string json = await File.ReadAllTextAsync(warningFile);
+                    if (!string.IsNullOrWhiteSpace(json))
+                        warnings = JsonSerializer.Deserialize<List<WarningModel>>(json) ?? new();
+                }
+                warnings.Add(warning);
+                JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
+                string updatedJson = JsonSerializer.Serialize(warnings, options);
+                await File.WriteAllTextAsync(warningFile, updatedJson);
             }
-            warnings.Add(warning);
-            JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-            string updatedJson = JsonSerializer.Serialize(warnings, options);
-            await File.WriteAllTextAsync(warningFile, updatedJson);
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error saving warning: {ex.Message}");
+            }
         }
 
         private static async Task RemoveOldWarnings(ulong guildId, string guildName)

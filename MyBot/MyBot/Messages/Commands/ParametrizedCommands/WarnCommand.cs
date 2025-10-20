@@ -23,9 +23,12 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
         protected override string CreateMessageToSend(SocketMessage message, string[] parameters)
         {
             if(!message.AuthorHasModPermission())
-                return "You do not have permission to issue warnings.";
-            if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
-                return $"Please mention a valid user to warn.";
+               return "You do not have permission to issue warnings.";
+            var targetUser = message.TryGetGuildUser(parameters[0]);
+            if (targetUser == null)
+                return $"Please specify a valid user to warn.";
+            //if (!(message.MentionedUsers.First() is SocketGuildUser targetUser))
+            //    return $"Please mention a valid user to warn.";
             string reason = parameters.Length > 1 ? string.Join(" ", parameters.Skip(1)) : "No reason provided";
             WarningModel warning = new WarningModel
             {

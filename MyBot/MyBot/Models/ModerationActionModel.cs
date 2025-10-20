@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyBot.Models
 {
     public class ModerationActionModel
     {
+		[JsonIgnore]
 		public SocketGuild Guild { get; set; }
 
 		public string GuildName { get; set; } = "";

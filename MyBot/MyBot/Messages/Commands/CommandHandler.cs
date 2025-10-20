@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
 using MyBot.Exceptions;
+using MyBot.Extensions;
 using MyBot.Messages.Commands.ParametrizedCommands;
 using MyBot.Messages.Commands.SimpleCommands;
 using System;
@@ -56,7 +57,7 @@ namespace MyBot.Messages.Commands
             }
             catch (Exception ex)
             {
-                throw new MyBotException("Error handling command", ex);
+                Console.WriteLine($"Error handling command: {ex.GetCompleteMessage()}");
             }
         }
 
