@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.ParametrizedCommands
 {
-    internal interface IParametrizedCommand
+    internal interface IParametrizedCommand : ICommand
     {
-        public string Name { get; }
-
-        public string Description { get; }
-
         public Task Execute(SocketMessage message, string[] parameters);
     }
 }

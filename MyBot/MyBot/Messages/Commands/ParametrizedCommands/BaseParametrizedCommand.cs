@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.ParametrizedCommands
 {
-    internal class BaseParametrizedCommand : IParametrizedCommand
+    internal abstract class BaseParametrizedCommand : IParametrizedCommand
     {
-        public virtual string Name => "BaseParametrizedCommand";
+        public abstract string Name { get; }
 
-        public virtual string Description => "This is a base parametrized command. It should be overridden.";
+        public abstract string Description { get; }
 
         protected virtual bool CanBotSendMessage => true;
 

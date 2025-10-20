@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.SimpleCommands
 {
-    internal interface ISimpleCommand
-    {
-        public string Name { get; }
-
-        public string Description { get; }
-
+    internal interface ISimpleCommand : ICommand
+	{
         public Task Execute(SocketMessage message);
     }
 }

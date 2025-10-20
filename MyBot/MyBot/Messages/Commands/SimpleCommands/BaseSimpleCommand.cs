@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.SimpleCommands
 {
-    internal class BaseSimpleCommand : ISimpleCommand
+    internal abstract class BaseSimpleCommand : ISimpleCommand
     {
-        public virtual string Name => "BaseSimpleCommand";
+        public abstract string Name { get; }
 
-        public virtual string Description => "This is a base simple command. It should be overridden.";
+        public abstract string Description { get; }
 
         protected virtual bool CanBotSendMessage => true;
 
