@@ -14,6 +14,6 @@ namespace MyBot.Messages.Commands.SimpleCommands
         public override string Description => "Sends a greeting message to the user.";
 
         protected override string CreateMessageToSend(SocketMessage message)
-            => $"Hello, {message.Author.Username}! 👋";
+            => $"Hello, {message.Author.Mention}! 👋";
     }
 }

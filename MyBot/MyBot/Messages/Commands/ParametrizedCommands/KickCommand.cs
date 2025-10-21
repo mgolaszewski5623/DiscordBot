@@ -20,10 +20,10 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override bool CanBeOutsideTextChannel => false;
 
+        protected override bool CanNoModeUserUseCommand => false;
+
         protected override string CreateMessageToSend(SocketMessage message, string[] parameters)
         {
-            if (!message.AuthorHasModPermission())
-                return "You do not have permission to kick user.";
             if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
                 return $"Please mention a valid user to kick.";
             string reason = parameters.Length > 1 ? string.Join(" ", parameters.Skip(1)) : "No reason provided";
