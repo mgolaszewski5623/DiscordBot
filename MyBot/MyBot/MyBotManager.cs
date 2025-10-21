@@ -45,7 +45,13 @@ namespace MyBot
         private static DiscordSocketConfig SetDiscordSocketConfig()
             => new DiscordSocketConfig
             {
-                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMessages | GatewayIntents.GuildMessageReactions | GatewayIntents.Guilds | GatewayIntents.DirectMessages | GatewayIntents.MessageContent,
+                GatewayIntents = GatewayIntents.AllUnprivileged 
+                | GatewayIntents.GuildMessages 
+                | GatewayIntents.GuildMessageReactions 
+                | GatewayIntents.Guilds 
+                | GatewayIntents.DirectMessages 
+                | GatewayIntents.MessageContent 
+                | GatewayIntents.GuildMembers,
             };
 
         private static void AddEvents()
@@ -54,6 +60,14 @@ namespace MyBot
 
             _client.MessageReceived += async (message) 
                 => await _messageHandler.HandleMessage(message);
+
+            _client.Ready += async () =>
+            {
+                foreach (var g in _client.Guilds)
+                {
+                    await g.DownloadUsersAsync();
+                }
+            };
         }
 
         private static Task LogRejestration(LogMessage msg)

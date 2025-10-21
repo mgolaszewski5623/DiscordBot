@@ -24,14 +24,18 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override string CreateMessageToSend(SocketMessage message, string[] parameters)
         {
-            //var targetUser = message.TryGetGuildUser(parameters[0]);
-            //if (targetUser == null)
-            //    return $"Please specify a valid user to warn.";
-            //else
-            //    return $"targetUser.Mention = {targetUser.Mention}";
+            if (message.Author is not SocketGuildUser guilduser)
+                return " NO";
+            var guild = guilduser.Guild;
+            foreach (var u in guild.Users)
+            {
+                Console.WriteLine($"ID: {u.Id}, Username: '{u.Username}', Nick: '{u.Nickname}'");
+            }
+
+            Console.WriteLine($"Łącznie guild.Users.Count = {guild.Users.Count}");
             if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
                 return $"Please mention a valid user to warn.";
-            string reason = parameters.Length > 1 ? string.Join(" ", parameters.Skip(1)) : "No reason provided";
+                string reason = parameters.Length > 1 ? string.Join(" ", parameters.Skip(1)) : "No reason provided";
             WarningModel warning = new WarningModel
             {
                 Guild = targetUser.Guild,
