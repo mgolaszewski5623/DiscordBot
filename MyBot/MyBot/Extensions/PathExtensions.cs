@@ -17,7 +17,7 @@ namespace MyBot.Extensions
             return name;
         }
 
-        public static void CreateLogDirectory(string path)
+        public static void CreateDirectory(string path)
         {
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);

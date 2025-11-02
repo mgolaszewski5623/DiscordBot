@@ -36,6 +36,7 @@ namespace MyBot.Messages.Commands
             new UserInfoCommand(),
             new WarnCommand(),
             new KickCommand(),
+            new UserWarningsCommand(),
         };
 
         public CommandHandler(string prefix)

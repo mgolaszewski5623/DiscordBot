@@ -43,7 +43,7 @@ namespace MyBot.DataManager
 
         private static async Task RemoveOldWarnings(ulong guildId, string guildName)
         {
-            PathExtensions.CreateLogDirectory(warningPath);
+            PathExtensions.CreateDirectory(warningPath);
             string warningFile = Path.Combine(warningPath, GetGuildFile(guildId, guildName));
             if(!File.Exists(warningFile))
                 return;

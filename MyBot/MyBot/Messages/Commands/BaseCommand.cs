@@ -20,22 +20,28 @@ namespace MyBot.Messages.Commands
 
         protected virtual bool CanNoModeUserUseCommand => true;
 
+        protected virtual IEnumerable<Func<SocketMessage, Task<(bool isValid, string? rason)>>> GetValidators()
+        {
+            if (!CanBotSendMessage)
+                yield return async m => (!m.Author.IsBot, "Bots cannot use this command.");
+
+            if (!CanBeOutsideTextChannel)
+                yield return async m => (m.Channel is SocketTextChannel, "This command can only be used in text channels.");
+
+            if (!CanNoModeUserUseCommand)
+                yield return async m => (m.AuthorHasModPermission(), "You do not have permission to use this command.");
+        }
+
         protected async Task<bool> ValidatePermissions(SocketMessage message)
         {
-            if (!CanBotSendMessage && message.Author.IsBot)
+            foreach (Func<SocketMessage, Task<(bool isValid, string? rason)>> validator in GetValidators())
             {
-                await SendMessage(message, "Bots cannot use this command.");
-                return false;
-            }
-            if (!CanBeOutsideTextChannel && message.Channel is not SocketTextChannel textChannel)
-            {
-                await SendMessage(message, "This command can only be used in text channels.");
-                return false;
-            }
-            if (!CanNoModeUserUseCommand && !message.AuthorHasModPermission())
-            {
-                await SendMessage(message, "You do not have permission to use this command.");
-                return false;
+                var (isValid, reason) = await validator(message);
+                if (!isValid)
+                {
+                    await SendMessage(message, reason ?? "You cannot use this command.");
+                    return false;
+                }
             }
             return true;
         }

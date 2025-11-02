@@ -15,7 +15,7 @@ namespace MyBot.DataManager
 
         public static async Task LogCommand(SocketMessage message)
         {
-            PathExtensions.CreateLogDirectory(logPath);
+            PathExtensions.CreateDirectory(logPath);
             string logFile = Path.Combine(logPath, GetLogFile(message).SanitizeFilePath());
             string user = message.Author.Username;
             ulong userId = message.Author.Id;
