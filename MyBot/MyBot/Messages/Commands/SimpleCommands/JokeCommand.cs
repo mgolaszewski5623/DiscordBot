@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyBot.DataManager;
 using MyBot.Exceptions;
 using MyBot.Extensions;
 using System;
@@ -26,6 +27,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
             }
             catch (Exception ex)
             {
+                await LogManager.LogException(ex, Enums.ExceptionType.ERROR);
                 Console.WriteLine($"Error fetching joke: {ex.GetCompleteMessage()}");
                 return "Sorry, I couldn't fetch a joke at the moment.";
             }

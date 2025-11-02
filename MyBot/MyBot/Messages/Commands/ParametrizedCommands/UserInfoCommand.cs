@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyBot.DataManager;
 using MyBot.Exceptions;
 using MyBot.Extensions;
 using System;
@@ -35,6 +36,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
             }
             catch (Exception ex)
             {
+                await LogManager.LogException(ex, MyBot.Enums.ExceptionType.INFORMATION);
                 Console.WriteLine($"Error retrieving user info: {ex.GetCompleteMessage()}");
                 return "Specified user not found or error retrieving user info.";
             }

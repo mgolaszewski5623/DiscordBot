@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyBot.Enums;
 using MyBot.Exceptions;
 using MyBot.Models;
 using System;
@@ -24,6 +25,7 @@ namespace MyBot.DataManager
 			}
 			catch (Exception ex)
             {
+                await LogManager.LogException(ex, ExceptionType.ERROR);
                 throw new MyBotException("An error occurred while trying to kick the user.", ex);
 			}
         }
@@ -37,8 +39,9 @@ namespace MyBot.DataManager
             }
             catch (Exception ex)
             {
-				// Do nothing if we can't inform the user, user can still be kicked
-			}
+                await LogManager.LogException(ex, ExceptionType.WARNING);
+                // Do nothing if we can't inform the user, user can still be kicked
+            }
 		}
 
         private static bool CheckHierarchy(SocketGuildUser? user, SocketGuildUser? moderator)

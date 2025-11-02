@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyBot.DataManager;
 using MyBot.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
             }
             catch (Exception ex)
             {
+                await LogManager.LogException(ex, MyBot.Enums.ExceptionType.ERROR);
                 Console.WriteLine($"Error fetching a meme: {ex.Message}");
                 return $"Sorry, I couldn't fetch a meme at the moment.";
             }

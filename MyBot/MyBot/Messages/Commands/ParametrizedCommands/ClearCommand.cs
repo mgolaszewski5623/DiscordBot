@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
+using MyBot.DataManager;
 using MyBot.Exceptions;
 using MyBot.Extensions;
 using System;
@@ -42,6 +43,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
             }
             catch (Exception ex)
             {
+                await LogManager.LogException(ex, Enums.ExceptionType.INFORMATION);
                 Console.WriteLine($"Error executing clear command: {ex.GetCompleteMessage()}");
                 return $"{ex.Message}";
             }

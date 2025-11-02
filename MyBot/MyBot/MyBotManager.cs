@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MyBot.DataManager;
+using MyBot.Enums;
 using MyBot.Extensions;
 using MyBot.Messages;
 using MyBot.Models;
@@ -39,6 +40,7 @@ namespace MyBot
             catch(Exception ex)
             {
                 Console.WriteLine($"Error starting bot: {ex.GetCompleteMessage()}");
+                await LogManager.LogException(ex, ExceptionType.CRITICAL);
             }
         }
 
@@ -56,7 +58,7 @@ namespace MyBot
 
         private static void AddEvents()
         {
-            _client.Log += LogRejestration;
+            _client.Log += RejestLogs;
 
             _client.MessageReceived += async (message) 
                 => await _messageHandler.HandleMessage(message);
@@ -70,7 +72,7 @@ namespace MyBot
             };
         }
 
-        private static Task LogRejestration(LogMessage msg)
+        private static Task RejestLogs(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;

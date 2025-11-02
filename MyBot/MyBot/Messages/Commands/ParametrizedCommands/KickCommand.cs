@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
+using MyBot.Enums;
 using MyBot.Extensions;
 using MyBot.Models;
 using System;
@@ -49,6 +50,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
             }
             catch (Exception ex)
             {
+                await LogManager.LogException(ex, ExceptionType.INFORMATION);
                 Console.WriteLine($"Error kicking user: {ex.GetCompleteMessage()}");
                 return $"Failed to kick user:";
             }

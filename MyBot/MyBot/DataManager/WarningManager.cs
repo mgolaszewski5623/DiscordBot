@@ -1,4 +1,5 @@
-﻿using MyBot.Extensions;
+﻿using MyBot.Enums;
+using MyBot.Extensions;
 using MyBot.Models;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace MyBot.DataManager
             catch(Exception ex)
             {
                 Console.WriteLine($"Error saving warning: {ex.Message}");
+                await LogManager.LogException(ex, ExceptionType.ERROR);
             }
         }
 

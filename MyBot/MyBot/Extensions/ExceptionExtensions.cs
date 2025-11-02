@@ -12,7 +12,7 @@ namespace MyBot.Extensions
         public static string GetCompleteMessage(this Exception exception)
         {
             string message = GetAllMessages(exception);
-            return removeLastSeparator(message);
+            return RemoveLastSeparator(message);
         }
 
         private static string GetAllMessages(Exception exception)
@@ -29,7 +29,7 @@ namespace MyBot.Extensions
             return message;
         }
 
-        private static string removeLastSeparator(string message)
+        private static string RemoveLastSeparator(string message)
         {
             if (message.Contains(SEPARATOR))
                 return message.Substring(0, message.Length - SEPARATOR.Length);

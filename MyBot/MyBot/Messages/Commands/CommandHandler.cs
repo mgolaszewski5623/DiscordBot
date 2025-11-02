@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
+using MyBot.Enums;
 using MyBot.Exceptions;
 using MyBot.Extensions;
 using MyBot.Messages.Commands.ParametrizedCommands;
@@ -48,23 +49,23 @@ namespace MyBot.Messages.Commands
         {
             try
             {
-                RejestrCommand();
+                await RejestrCommand(message);
                 string[] messageParts = message.Content.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 if (messageParts.Length == 1)
                     await HandleSingleCommand(message);
                 else
                     await HandleParamCommand(message, messageParts);
-                CommandLogger.LogCommand(message).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error handling command: {ex.GetCompleteMessage()}");
+                await LogManager.LogException(ex, ExceptionType.ERROR);
             }
         }
 
-        private void RejestrCommand()
+        private async Task RejestrCommand(SocketMessage message)
         {
-            // Todo: Implement command registration logic here
+            await LogManager.LogCommand(message);
         }
 
         private async Task HandleSingleCommand(SocketMessage message)
