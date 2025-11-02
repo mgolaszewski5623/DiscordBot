@@ -22,7 +22,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override bool CanNoModeUserUseCommand => false;
 
-        protected override string CreateMessageToSend(SocketMessage message, string[] parameters)
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] parameters)
         {
             if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
                 return $"Please mention a valid user to warn.";
@@ -38,11 +38,11 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
                 Date = DateTime.UtcNow
             };
             WarningManager.SaveWarning(warning).GetAwaiter().GetResult();
-            ServeWarning(warning);
+            await ServeWarning(warning);
             return $"⚠️ {targetUser.Mention} dostał ostrzeżenie: **{reason}**";
         }
 
-        private void ServeWarning(WarningModel warning)
+        private async Task ServeWarning(WarningModel warning)
         {
             if (WarningManager.HasReachedMaxWarnings(warning.GuildId, warning.GuildName, warning.TargetUserId).GetAwaiter().GetResult())
             {

@@ -18,11 +18,11 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         private const string JOKE_API_URL = "https://v2.jokeapi.dev/joke/Any";
 
-        protected override string CreateMessageToSend(SocketMessage message)
+        protected override async Task<object> CreateMessageToSend(SocketMessage message)
         {
             try
             {
-                return GetRandomJokeAsync().GetAwaiter().GetResult();
+                return await GetRandomJokeAsync();
             }
             catch (Exception ex)
             {
@@ -44,11 +44,13 @@ namespace MyBot.Messages.Commands.SimpleCommands
                     });
                 if (joke == null)
                     throw new MyBotException("Failed to parse joke response");
-                if (joke.Type == "single")
-                    return joke.Joke;
-                if (joke.Type == "twopart")
-                    return $"{joke.Setup}\n{joke.Delivery}";
-                throw new MyBotException($"Unknown joke type: {joke.Type}");
+
+                return joke.Type switch
+                {
+                    "single" => joke.Joke,
+                    "twopart" => $"{joke.Setup}\n{joke.Delivery}",
+                    _ => throw new MyBotException($"Unknown joke type: {joke.Type}")
+                };
             }
         }
 

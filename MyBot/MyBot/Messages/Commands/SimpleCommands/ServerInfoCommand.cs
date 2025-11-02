@@ -17,10 +17,10 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         protected override bool CanBeOutsideTextChannel => false;
 
-        protected override string CreateMessageToSend(SocketMessage message)
+        protected override Task<object> CreateMessageToSend(SocketMessage message)
         {
             if (message.Channel is not SocketGuildChannel guildChannel)
-                return "This command can only be used in a server text channel.";
+                return Task.FromResult<object>("This command can only be used in a server text channel.");
             SocketGuild guild = guildChannel.Guild;
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Server Name: {guild.Name}");
@@ -31,7 +31,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
             sb.AppendLine($"Roles: {guild.Roles.Count}");
             sb.AppendLine($"Channels: {guild.Channels.Count}");
             sb.AppendLine($"Emojis: {guild.Emotes.Count}");
-            return sb.ToString();
+            return Task.FromResult<object>(sb.ToString());
         }
     }
 }

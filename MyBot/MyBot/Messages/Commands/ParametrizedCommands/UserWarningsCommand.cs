@@ -17,13 +17,13 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override bool CanNoModeUserUseCommand => false;
 
-        protected override string CreateMessageToSend(SocketMessage message, string[] parameters)
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] parameters)
         {
             try
             {
                 if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
                     return $"Please mention a valid user to warn.";
-                List<Models.WarningModel> warnings = Task.Run(async () => await DataManager.WarningManager.GetWarnings(targetUser.Guild.Id, targetUser.Guild.Name, targetUser.Id)).Result;
+                List<Models.WarningModel> warnings = await DataManager.WarningManager.GetWarnings(targetUser.Guild.Id, targetUser.Guild.Name, targetUser.Id);
                 if (warnings.Count > 0)
                 {
                     StringBuilder sb = new StringBuilder();

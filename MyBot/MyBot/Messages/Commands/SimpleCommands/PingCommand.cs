@@ -13,7 +13,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         public override string Description => "Responds with 'Pong!' to check if the bot is responsive.";
 
-        protected override string CreateMessageToSend(SocketMessage message)
-            => "Pong!";
+        protected override Task<object> CreateMessageToSend(SocketMessage message)
+            => Task.FromResult<object>("Pong!");
     }
 }

@@ -15,7 +15,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         public override string Description => "Displays information about a specified user.";
 
-        protected override string CreateMessageToSend(SocketMessage message, string[] args)
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] args)
         {
             if (args.Length != 1)
                 return "Invalid number of arguments.";

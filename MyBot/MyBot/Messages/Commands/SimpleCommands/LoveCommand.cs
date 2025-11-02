@@ -13,7 +13,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         public override string Description => "Expresses love between Bubu and Dudu.";
 
-        protected override string CreateMessageToSend(SocketMessage message)
-            => $"Bubu loves Dudu! ❤️ Dudu loves Bubu! ❤️";
+        protected override Task<object> CreateMessageToSend(SocketMessage message)
+            => Task.FromResult<object>($"Bubu loves Dudu! ❤️ Dudu loves Bubu! ❤️");
     }
 }

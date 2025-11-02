@@ -22,7 +22,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override bool CanNoModeUserUseCommand => false;
 
-        protected override string CreateMessageToSend(SocketMessage message, string[] parameters)
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] parameters)
         {
             if (!(message.MentionedUsers.FirstOrDefault() is SocketGuildUser targetUser))
                 return $"Please mention a valid user to kick.";
@@ -37,14 +37,14 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
                 Reason = reason,
                 Date = DateTime.UtcNow
             };
-            return ServeKick(kick);
+            return await ServeKick(kick);
         }
 
-        private string ServeKick(KickModel kick)
+        private async Task<string> ServeKick(KickModel kick)
         {
             try
             {
-                KickManager.KickUser(kick).GetAwaiter().GetResult();
+                await KickManager.KickUser(kick);
                 return $"👢 {kick.TargetUserId} has been kicked. Reason: **{kick.Reason}**";
             }
             catch (Exception ex)

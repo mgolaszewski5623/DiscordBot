@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using MyBot.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,24 @@ namespace MyBot.Messages.Commands.SimpleCommands
         {
             if(!await ValidatePermissions(message))
                 return;
-            string messageToSend = CreateMessageToSend(message);
-            await SendMessage(message, messageToSend);
+            object messageToSend = await CreateMessageToSend(message);
+            switch (messageToSend)
+            {
+                case string text:
+                    await SendMessage(message, text);
+                    break;
+                case Embed embed:
+                    await message.Channel.SendMessageAsync(embed: embed);
+                    break;
+                case (string text, Embed embed):
+                    await message.Channel.SendMessageAsync(text, embed: embed);
+                    break;
+                default:
+                    await SendMessage(message, "⚠️ Unsupported message type returned by command.");
+                    break;
+            }
         }
 
-        protected abstract string CreateMessageToSend(SocketMessage message);
+        protected abstract Task<object> CreateMessageToSend(SocketMessage message);
     }
 }

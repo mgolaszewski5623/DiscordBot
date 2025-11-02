@@ -11,41 +11,48 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.ParametrizedCommands
 {
-    internal class ClearCommand : IParametrizedCommand
+    internal class ClearCommand : BaseParametrizedCommand
     {
-        public string Name => "clear";
+        private const int SLEEP_TIME = 2000;
+        private const int MAX_MESSAGES = 100;
 
-        public string Description => "Clears a specified number of messages from the channel.";
+        public override string Name => "clear";
 
-        public async Task Execute(SocketMessage message, string[] args)
+        public override string Description => "Clears a specified number of messages from the channel.";
+
+        protected override bool CanBotSendMessage => false;
+
+        protected override bool CanBeOutsideTextChannel => false;
+
+        protected override bool CanNoModeUserUseCommand => false;
+
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] args)
         {
             try
             {
                 SocketTextChannel? channel = message.Channel as SocketTextChannel;
-                int count = ValidateClearCommand(message, args);
+                int count = ValidateCount(args);
                 IEnumerable<IMessage> messages = await channel.GetMessagesAsync(count + 1).FlattenAsync();
                 await channel.DeleteMessagesAsync(messages);
+
                 RestUserMessage confirmationMessage = await channel.SendMessageAsync($"Deleted {count} messages.");
-                await Task.Delay(1000);
+                await Task.Delay(SLEEP_TIME);
                 await confirmationMessage.DeleteAsync();
+                return string.Empty;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error executing clear command: {ex.GetCompleteMessage()}");
-                await message.Channel.SendMessageAsync($"{ex.Message}");
+                return $"{ex.Message}";
             }
         }
 
-        private int ValidateClearCommand(SocketMessage message, string[] args)
+        private static int ValidateCount(string[] args)
         {
-            if (!(message.Channel is SocketTextChannel))
-                throw new MyBotException("This command can only be used in text channels.");
-            if (!message.AuthorHasModPermission())
-                throw new MyBotException("User doesn't have permission to use this command.");
-            if (args.Length != 1 || !int.TryParse(args[0], out int count) || count <= 0)
-                throw new MyBotException("Invalid command usage. Correct usage: !clear <number_of_messages>");
-            if (count <= 0 || count > 100)
-                throw new MyBotException("Number of messages to delete must be between 1 and 100.");
+            if (args.Length != 1 || !int.TryParse(args[0], out int count))
+                throw new MyBotException("Usage: !clear <number_of_messages>");
+            if (count < 1 || count > MAX_MESSAGES)
+                throw new MyBotException($"Number of messages to delete must be between 1 and {MAX_MESSAGES}.");
             return count;
         }
     }

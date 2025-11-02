@@ -13,7 +13,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         public override string Description => "Displays the current server time.";
 
-        protected override string CreateMessageToSend(SocketMessage message)
-            => $"Current server time is: {DateTime.Now.ToString("F")}";
+        protected override Task<object> CreateMessageToSend(SocketMessage message)
+            => Task.FromResult<object>($"Current server time is: {DateTime.Now.ToString("F")}");
     }
 }

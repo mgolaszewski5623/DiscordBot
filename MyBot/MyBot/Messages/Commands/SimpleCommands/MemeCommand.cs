@@ -9,28 +9,28 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.SimpleCommands
 {
-    internal class MemeCommand : ISimpleCommand
+    internal class MemeCommand : BaseSimpleCommand
     {
-        public string Name => "meme";
-
-        public string Description => "Sends a random meme.";
-
         private const string MEME_API_URL = "https://meme-api.com/gimme";
 
-        public async Task Execute(SocketMessage message)
+        public override string Name => "meme";
+
+        public override string Description => "Sends a random meme.";
+
+        protected override async Task<object> CreateMessageToSend(SocketMessage message)
         {
             try
             {
-                await SendMemeAsync(message);
+                return await GetMemeEmbedAsync();
             }
-            catch (MyBotException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Error fetching a meme: {ex.Message}");
-                await message.Channel.SendMessageAsync($"Sorry, I couldn't fetch a meme at the moment.");
+                return $"Sorry, I couldn't fetch a meme at the moment.";
             }
         }
 
-        private async Task SendMemeAsync(SocketMessage message)
+        private async Task<Discord.Embed> GetMemeEmbedAsync()
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -43,14 +43,13 @@ namespace MyBot.Messages.Commands.SimpleCommands
                     });
                 if (meme == null)
                     throw new MyBotException("Failed to parse meme response");
-                Discord.Embed embed = new Discord.EmbedBuilder()
+                return new Discord.EmbedBuilder()
                     .WithTitle(meme.Title)
                     .WithUrl(meme.PostLink)
                     .WithImageUrl(meme.Url)
                     .WithFooter($"👍 {meme.Ups} | r/{meme.Subreddit}")
                     .WithColor(Discord.Color.Purple)
                     .Build();
-                await message.Channel.SendMessageAsync(embed: embed);
             }
         }
 

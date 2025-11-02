@@ -19,11 +19,11 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         private const string QUOTE_API_URL = "https://zenquotes.io/api/random";
 
-        protected override string CreateMessageToSend(Discord.WebSocket.SocketMessage message)
+        protected override async Task<object> CreateMessageToSend(Discord.WebSocket.SocketMessage message)
         {
             try
             {
-                return Task.Run(() => GetRandomQuoteAsync()).GetAwaiter().GetResult();
+                return await GetRandomQuoteAsync();
             }
             catch (Exception ex)
             {

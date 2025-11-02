@@ -13,7 +13,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         public override string Description => "Sends a greeting message to the user.";
 
-        protected override string CreateMessageToSend(SocketMessage message)
-            => $"Hello, {message.Author.Mention}! 👋";
+        protected override Task<object> CreateMessageToSend(SocketMessage message)
+            => Task.FromResult<object>($"Hello, {message.Author.Mention}! 👋");
     }
 }
