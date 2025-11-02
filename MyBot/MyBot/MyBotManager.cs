@@ -60,22 +60,27 @@ namespace MyBot
         {
             _client.Log += RejestLogs;
 
-            _client.MessageReceived += async (message) 
-                => await _messageHandler.HandleMessage(message);
+            _client.MessageReceived += OnMessageReceived;
 
-            _client.Ready += async () =>
+            _client.Ready += OnClientReady;
+        }
+        private static async Task OnMessageReceived(SocketMessage message)
+            => await _messageHandler.HandleMessage(message);
+
+        private static async Task OnClientReady()
+        {
+            foreach (SocketGuild? g in _client.Guilds)
             {
-                foreach (var g in _client.Guilds)
-                {
-                    await g.DownloadUsersAsync();
-                }
-            };
+                Console.WriteLine($"Downloading users for guild: {g.Name}");
+                await g.DownloadUsersAsync();
+            }
+            Console.WriteLine("All guild users downloaded!");
         }
 
-        private static Task RejestLogs(LogMessage msg)
+        private static async Task RejestLogs(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
+            await LogManager.LogBotLifeCycle(msg.ToString());
         }
     }
 }

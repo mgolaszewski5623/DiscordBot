@@ -15,6 +15,7 @@ namespace MyBot.DataManager
         private const string LOGS_DIRECTORY = "Data/Logs/";
         private const string COMMANDS_LOG_PATH = "Commands/";
         private const string EXCEPTIONS_LOG_PATH = "Exceptions/";
+        private const string BOT_LIFECYCLE_LOG_PATH = "BotLifecycle/";
 
         public static async Task LogCommand(SocketMessage message)
         {
@@ -59,5 +60,15 @@ namespace MyBot.DataManager
 
         private static string GetExceptionLogFile(ExceptionType level)
             => $"E{PATH_SEPARATOR}{level}.log";
+
+        public static async Task LogBotLifeCycle(string message)
+        {
+            string fullLogPath = Path.Combine(LOGS_DIRECTORY, BOT_LIFECYCLE_LOG_PATH);
+            PathExtensions.CreateDirectory(fullLogPath);
+            string logFile = Path.Combine(fullLogPath, "BotLifecycle.log".SanitizeFilePath());
+            string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string logLine = $"[{time}] {message}";
+            await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
+        }
     }
 }
