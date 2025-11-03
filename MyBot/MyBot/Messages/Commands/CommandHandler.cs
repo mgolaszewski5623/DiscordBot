@@ -1,15 +1,16 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
 using MyBot.Enums;
-using MyBot.Exceptions;
-using MyBot.Extensions;
-using MyBot.Messages.Commands.ParametrizedCommands;
-using MyBot.Messages.Commands.SimpleCommands;
+using MyBot.Messages.Commands.Base;
+using MyBot.Messages.Commands.FunCommands;
+using MyBot.Messages.Commands.GeneralCommands;
+using MyBot.Messages.Commands.ModerationCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MyBot.Messages.Commands
 {
@@ -17,7 +18,7 @@ namespace MyBot.Messages.Commands
     {
         private readonly string prefix;
 
-        private readonly List<ISimpleCommand> simpleCommands = new()
+        private readonly List<IMyBotCommand> commands = new()
         {
             new LoveCommand(),
             new HelloCommand(),
@@ -29,10 +30,6 @@ namespace MyBot.Messages.Commands
             new QuoteCommand(),
             new ServerInfoCommand(),
             new TimeCommand(),
-        };
-
-        private readonly List<IParametrizedCommand> parametrizedCommands = new()
-        {
             new ClearCommand(),
             new UserInfoCommand(),
             new WarnCommand(),
@@ -51,10 +48,14 @@ namespace MyBot.Messages.Commands
             {
                 await RejestrCommand(message);
                 string[] messageParts = message.Content.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                if (messageParts.Length == 1)
-                    await HandleSingleCommand(message);
+                string commandName = messageParts[0];
+                string[] messageArgs = messageParts.Skip(1).ToArray();
+
+                IMyBotCommand? command = commands.FirstOrDefault(c => string.Equals($"{prefix}{c.Name}", commandName, StringComparison.OrdinalIgnoreCase));
+                if (command != null)
+                    await command.Execute(message, messageArgs);
                 else
-                    await HandleParamCommand(message, messageParts);
+                    await HandleUnknownCommand(message);
             }
             catch (Exception ex)
             {
@@ -65,26 +66,6 @@ namespace MyBot.Messages.Commands
         private async Task RejestrCommand(SocketMessage message)
         {
             await LogManager.LogCommand(message);
-        }
-
-        private async Task HandleSingleCommand(SocketMessage message)
-        {
-            ISimpleCommand? command = simpleCommands.FirstOrDefault(c => string.Equals($"{prefix}{c.Name}", message.Content, StringComparison.OrdinalIgnoreCase));
-            if (command != null)
-                await command.Execute(message);
-            else
-                await HandleUnknownCommand(message);
-        }
-
-        private async Task HandleParamCommand(SocketMessage message, string[] messageParts)
-        {
-            string commandName = messageParts[0];
-            string[] args = messageParts.Skip(1).ToArray();
-            IParametrizedCommand? command = parametrizedCommands.FirstOrDefault(c => string.Equals($"{prefix}{c.Name}", message.Content, StringComparison.OrdinalIgnoreCase));
-            if (command != null)
-                await command.Execute(message, args);
-            else
-                await HandleUnknownCommand(message);
         }
 
         private async Task HandleUnknownCommand(SocketMessage message)

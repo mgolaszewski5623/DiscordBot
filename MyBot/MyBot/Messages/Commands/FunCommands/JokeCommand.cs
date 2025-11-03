@@ -2,7 +2,7 @@
 using MyBot.DataManager;
 using MyBot.Enums;
 using MyBot.Exceptions;
-using MyBot.Extensions;
+using MyBot.Messages.Commands.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands.SimpleCommands
+namespace MyBot.Messages.Commands.FunCommands
 {
-    internal class JokeCommand : BaseSimpleCommand
+    internal class JokeCommand : BaseCommand
     {
         public override string Name => "joke";
 
@@ -20,7 +20,9 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         private const string JOKE_API_URL = "https://v2.jokeapi.dev/joke/Any";
 
-        protected override async Task<object> CreateMessageToSend(SocketMessage message)
+        protected override bool AllowParameters => false;
+
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters = null)
         {
             try
             {

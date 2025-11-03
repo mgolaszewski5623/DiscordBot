@@ -3,16 +3,16 @@ using Discord.Rest;
 using Discord.WebSocket;
 using MyBot.DataManager;
 using MyBot.Exceptions;
-using MyBot.Extensions;
+using MyBot.Messages.Commands.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands.ParametrizedCommands
+namespace MyBot.Messages.Commands.ModerationCommands
 {
-    internal class ClearCommand : BaseParametrizedCommand
+    internal class ClearCommand : BaseCommand
     {
         private const int SLEEP_TIME = 2000;
         private const int MAX_MESSAGES = 100;
@@ -27,12 +27,14 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override bool CanNoModeUserUseCommand => false;
 
-        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] args)
+        protected override bool RequireParameters => true;
+
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters)
         {
             try
             {
                 SocketTextChannel? channel = message.Channel as SocketTextChannel;
-                int count = ValidateCount(args);
+                int count = ValidateCount(parameters);
                 IEnumerable<IMessage> messages = await channel.GetMessagesAsync(count + 1).FlattenAsync();
                 await channel.DeleteMessagesAsync(messages);
 

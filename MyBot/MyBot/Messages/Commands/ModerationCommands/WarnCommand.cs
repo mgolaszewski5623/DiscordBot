@@ -1,7 +1,7 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
 using MyBot.Exceptions;
-using MyBot.Extensions;
+using MyBot.Messages.Commands.Base;
 using MyBot.Models;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands.ParametrizedCommands
+namespace MyBot.Messages.Commands.ModerationCommands
 {
-    internal class WarnCommand : BaseParametrizedCommand
+    internal class WarnCommand : BaseCommand
     {
         public override string Name => "warn";
 
@@ -23,7 +23,9 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
 
         protected override bool CanNoModeUserUseCommand => false;
 
-        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] parameters)
+        protected override bool RequireParameters => true;
+
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters)
         {
             try
             {

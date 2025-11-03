@@ -2,6 +2,7 @@
 using MyBot.DataManager;
 using MyBot.Enums;
 using MyBot.Exceptions;
+using MyBot.Messages.Commands.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands.SimpleCommands
+namespace MyBot.Messages.Commands.FunCommands
 {
-    internal class MemeCommand : BaseSimpleCommand
+    internal class MemeCommand : BaseCommand
     {
         private const string MEME_API_URL = "https://meme-api.com/gimme";
 
@@ -19,7 +20,9 @@ namespace MyBot.Messages.Commands.SimpleCommands
 
         public override string Description => "Sends a random meme.";
 
-        protected override async Task<object> CreateMessageToSend(SocketMessage message)
+        protected override bool AllowParameters => false;
+
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters = null)
         {
             try
             {

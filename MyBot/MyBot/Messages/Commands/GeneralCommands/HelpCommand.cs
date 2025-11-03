@@ -1,19 +1,22 @@
 ﻿using Discord.WebSocket;
+using MyBot.Messages.Commands.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands.SimpleCommands
+namespace MyBot.Messages.Commands.GeneralCommands
 {
-    internal class HelpCommand : BaseSimpleCommand
+    internal class HelpCommand : BaseCommand
     {
         public override string Name => "help";
 
         public override string Description => "Provides a list of available commands.";
 
-        protected override Task<object> CreateMessageToSend(SocketMessage message)
+        protected override bool AllowParameters => false;
+
+        protected override Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters = null)
         {
             StringBuilder commandsList = new StringBuilder();
             commandsList.AppendLine("Here are the available commands:");

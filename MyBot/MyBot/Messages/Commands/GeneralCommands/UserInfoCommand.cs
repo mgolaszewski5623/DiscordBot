@@ -1,25 +1,26 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
 using MyBot.Enums;
-using MyBot.Exceptions;
-using MyBot.Extensions;
+using MyBot.Messages.Commands.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands.ParametrizedCommands
+namespace MyBot.Messages.Commands.GeneralCommands
 {
-    internal class UserInfoCommand : BaseParametrizedCommand
+    internal class UserInfoCommand : BaseCommand
     {
         public override string Name => "userinfo";
 
         public override string Description => "Displays information about a specified user.";
 
-        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[] args)
+        protected override bool RequireParameters => true;
+
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters)
         {
-            if (args.Length != 1)
+            if (parameters.Length != 1)
                 return "Invalid number of arguments.";
             try
             {

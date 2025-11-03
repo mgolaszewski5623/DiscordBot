@@ -1,7 +1,8 @@
-﻿using MyBot.DataManager;
+﻿using Discord.WebSocket;
+using MyBot.DataManager;
 using MyBot.Enums;
 using MyBot.Exceptions;
-using MyBot.Extensions;
+using MyBot.Messages.Commands.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +10,21 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace MyBot.Messages.Commands.SimpleCommands
+namespace MyBot.Messages.Commands.FunCommands
 {
-    internal class QuoteCommand : BaseSimpleCommand
+    internal class QuoteCommand : BaseCommand
     {
+        private const string QUOTE_API_URL = "https://zenquotes.io/api/random";
+
         public override string Name => "quote";
         
         public override string Description => "Sends a random quote.";
 
         protected override bool CanBotSendMessage => false;
 
-        private const string QUOTE_API_URL = "https://zenquotes.io/api/random";
+        protected override bool AllowParameters => false;
 
-        protected override async Task<object> CreateMessageToSend(Discord.WebSocket.SocketMessage message)
+        protected override async Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters = null)
         {
             try
             {
