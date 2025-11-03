@@ -69,27 +69,27 @@ namespace MyBot.Messages.Commands
 
         private async Task HandleSingleCommand(SocketMessage message)
         {
-            ISimpleCommand? command = simpleCommands.FirstOrDefault(c => $"{prefix}{c.Name}" == message.Content);
+            ISimpleCommand? command = simpleCommands.FirstOrDefault(c => string.Equals($"{prefix}{c.Name}", message.Content, StringComparison.OrdinalIgnoreCase));
             if (command != null)
                 await command.Execute(message);
             else
-                HandleUnknownCommand(message.Content);
+                await HandleUnknownCommand(message);
         }
 
         private async Task HandleParamCommand(SocketMessage message, string[] messageParts)
         {
             string commandName = messageParts[0];
             string[] args = messageParts.Skip(1).ToArray();
-            IParametrizedCommand? command = parametrizedCommands.FirstOrDefault(c => $"{prefix}{c.Name}" == commandName);
+            IParametrizedCommand? command = parametrizedCommands.FirstOrDefault(c => string.Equals($"{prefix}{c.Name}", message.Content, StringComparison.OrdinalIgnoreCase));
             if (command != null)
                 await command.Execute(message, args);
             else
-                HandleUnknownCommand(message.Content);
+                await HandleUnknownCommand(message);
         }
 
-        private void HandleUnknownCommand(string message)
+        private async Task HandleUnknownCommand(SocketMessage message)
         {
-            // Todo: Implement unknown command handling logic here
+            await message.Channel.SendMessageAsync("❓ Unknown command. Type !help to see the list of available commands.");
         }
     }
 }
