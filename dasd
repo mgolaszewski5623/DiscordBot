@@ -1,0 +1,113 @@
+[33mcommit 1f9fea701b0e1d9e534ca23afc2c2443d7d4d201[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Mon Nov 3 20:02:21 2025 +0100
+
+    Command interfaces merge
+
+[33mcommit 1e5e69e1ccc55758907af75643422a500992c864[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Mon Nov 3 19:15:31 2025 +0100
+
+    CommandHandler update
+
+[33mcommit 794e38f4a5c0a7553c0d94247b2073b40cf50dea[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Mon Nov 3 18:26:11 2025 +0100
+
+    Exception improvement
+
+[33mcommit c9c05e91e1c9c7239369fd363af71192c57a15c0[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Nov 2 14:01:42 2025 +0100
+
+    Logging updated
+
+[33mcommit bb0f2c4dcfc11d77ceb952289b9355734ea89682[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Nov 2 13:24:11 2025 +0100
+
+    Exception logger added
+
+[33mcommit e84b36d15c2b519e5a8c00ff97830036b7de08ff[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Nov 2 11:05:42 2025 +0100
+
+    Sending messages improvement
+
+[33mcommit a871ea052da31d1b450cc692ad5fdcdb1dcdd28f[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Nov 2 09:50:57 2025 +0100
+
+    Commands validation improvement
+
+[33mcommit fa73db89ac9229724da965b3582e5d5a465a1573[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Tue Oct 21 10:57:18 2025 +0200
+
+    GuildUsers cache improvments
+
+[33mcommit 6df4ef0ee91f4ea72ed8246a0c728eb573b897bb[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Tue Oct 21 09:27:46 2025 +0200
+
+    Added abstract class 'BaseCommand'
+
+[33mcommit c13578a9bd79260cdf54b4e6495fc6f7cc88daeb[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Mon Oct 20 15:39:04 2025 +0200
+
+    files impovments
+
+[33mcommit 9387b7e021473656db8f03a5c8605133644c00b4[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Mon Oct 20 14:33:26 2025 +0200
+
+    Added kick functionality
+
+[33mcommit 7f72154669bd01b6e10cbc385abbb4e67fc003e0[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Mon Oct 20 13:12:32 2025 +0200
+
+    base classes have been changed to abstract ones and a base interface has been added for ISimpleCommand and IParametrizedCommand interfaces
+
+[33mcommit 4f9fd9da88dc894bbbb4d4640ba5122fb73206aa[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Tue Oct 14 10:48:18 2025 +0200
+
+    All var's have been changed to variable types
+
+[33mcommit c1878f073d9cdb56e2d42a6b4a925ff61511ef23[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Oct 5 17:18:32 2025 +0200
+
+    Modified the.gitignote file and added the Todo.txt file with project plans
+
+[33mcommit f67926d9fdd26b84c38f358be9cfa055f3f250b8[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Oct 5 17:07:17 2025 +0200
+
+    added warnings
+
+[33mcommit 10f11de21f8568cb351a5aff77bac50283e45c15[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Oct 5 15:00:50 2025 +0200
+
+    added saving command logs
+
+[33mcommit 7d1024157e20d4bf6be79e7dee77d16fcb96e7b1[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Oct 5 11:51:23 2025 +0200
+
+    added chat cleaning and user information
+
+[33mcommit d460f937db8af5338c1534cf927d18b0eb430ad2[m
+Author: m.golaszewski5623 <m.golaszewski5623@wp.pl>
+Date:   Sun Oct 5 11:13:08 2025 +0200
+
+    My discord bot project
+
+[33mcommit 11be6c17b12888f66e4ee9948db77a29db1f04f4[m
+Author: M. Golaszewski <95693691+mgolaszewski5623@users.noreply.github.com>
+Date:   Sun Oct 5 08:18:53 2025 +0200
+
+    Initial commit

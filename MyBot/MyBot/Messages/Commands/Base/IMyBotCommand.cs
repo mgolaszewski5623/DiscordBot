@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyBot.Messages.Commands.Base
 {
-    internal interface IMyBotCommand
+    public interface IMyBotCommand
     {
         public string Name { get; }
 

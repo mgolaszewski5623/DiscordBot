@@ -26,6 +26,8 @@ namespace MyBot
                 string token = configurationData.Token;
                 string prefix = configurationData.Prefix;
 
+                CommandManager.Initialize();
+
                 DiscordSocketConfig discordSocketConfig = SetDiscordSocketConfig();
                 _client = new DiscordSocketClient(discordSocketConfig);
                 _messageHandler = new MessageHandler(prefix);

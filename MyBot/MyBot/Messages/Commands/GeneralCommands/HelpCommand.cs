@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using MyBot.DataManager;
 using MyBot.Messages.Commands.Base;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,10 @@ namespace MyBot.Messages.Commands.GeneralCommands
         protected override Task<object> CreateMessageToSend(SocketMessage message, string[]? parameters = null)
         {
             StringBuilder commandsList = new StringBuilder();
+            List<IMyBotCommand> allCommands = CommandManager.GetAllCommands();
             commandsList.AppendLine("Here are the available commands:");
-            commandsList.AppendLine("!hello - Sends a greeting message to the user.");
-            commandsList.AppendLine("!love - Sends a love message.");
-            commandsList.AppendLine("!info - Provides information about the bot.");
+            foreach (IMyBotCommand command in allCommands)
+                commandsList.AppendLine($"{message.Content[0]}{command.Name} - {command.Description}");
             return Task.FromResult<object>(commandsList.ToString());
         }
     }

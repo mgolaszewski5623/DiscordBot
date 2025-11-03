@@ -18,25 +18,6 @@ namespace MyBot.Messages.Commands
     {
         private readonly string prefix;
 
-        private readonly List<IMyBotCommand> commands = new()
-        {
-            new LoveCommand(),
-            new HelloCommand(),
-            new InfoCommand(),
-            new HelpCommand(),
-            new PingCommand(),
-            new JokeCommand(),
-            new MemeCommand(),
-            new QuoteCommand(),
-            new ServerInfoCommand(),
-            new TimeCommand(),
-            new ClearCommand(),
-            new UserInfoCommand(),
-            new WarnCommand(),
-            new KickCommand(),
-            new UserWarningsCommand(),
-        };
-
         public CommandHandler(string prefix)
         {
             this.prefix = prefix;
@@ -51,7 +32,7 @@ namespace MyBot.Messages.Commands
                 string commandName = messageParts[0];
                 string[] messageArgs = messageParts.Skip(1).ToArray();
 
-                IMyBotCommand? command = commands.FirstOrDefault(c => string.Equals($"{prefix}{c.Name}", commandName, StringComparison.OrdinalIgnoreCase));
+                IMyBotCommand? command = CommandManager.GetCommand(commandName, prefix);
                 if (command != null)
                     await command.Execute(message, messageArgs);
                 else
