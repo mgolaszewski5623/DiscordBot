@@ -1,4 +1,5 @@
 ﻿using MyBot.DataManager;
+using MyBot.Enums;
 using MyBot.Exceptions;
 using MyBot.Extensions;
 using System;
@@ -28,8 +29,7 @@ namespace MyBot.Messages.Commands.SimpleCommands
             }
             catch (Exception ex)
             {
-                await LogManager.LogException(ex, MyBot.Enums.ExceptionType.ERROR);
-                Console.WriteLine($"Error fetching quote. {ex.GetCompleteMessage()}");
+                await LogManager.LogException(ex, ExceptionType.ERROR);
                 return "Sorry, I couldn't fetch a quote at this time.";
             }
         }

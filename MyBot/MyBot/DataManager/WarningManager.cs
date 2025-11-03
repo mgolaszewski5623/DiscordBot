@@ -38,43 +38,65 @@ namespace MyBot.DataManager
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"Error saving warning: {ex.Message}");
                 await LogManager.LogException(ex, ExceptionType.ERROR);
+                throw new Exception("An error occurred while saving the warning.", ex);
             }
         }
 
         private static async Task RemoveOldWarnings(ulong guildId, string guildName)
         {
-            PathExtensions.CreateDirectory(warningPath);
-            string warningFile = Path.Combine(warningPath, GetGuildFile(guildId, guildName));
-            if(!File.Exists(warningFile))
-                return;
-            string json = await File.ReadAllTextAsync(warningFile);
-            List<WarningModel> warnings = JsonSerializer.Deserialize<List<WarningModel>>(json) ?? new List<WarningModel>();
-            DateTime cutoffData = DateTime.UtcNow.AddDays(-WarningDuration);
-            warnings = warnings.Where(w => w.Date >= cutoffData).ToList();
+            try
+            {
+                PathExtensions.CreateDirectory(warningPath);
+                string warningFile = Path.Combine(warningPath, GetGuildFile(guildId, guildName));
+                if (!File.Exists(warningFile))
+                    return;
+                string json = await File.ReadAllTextAsync(warningFile);
+                List<WarningModel> warnings = JsonSerializer.Deserialize<List<WarningModel>>(json) ?? new List<WarningModel>();
+                DateTime cutoffData = DateTime.UtcNow.AddDays(-WarningDuration);
+                warnings = warnings.Where(w => w.Date >= cutoffData).ToList();
 
-            JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-            string updatedJson = JsonSerializer.Serialize(warnings, options);
-            await File.WriteAllTextAsync(warningFile, updatedJson);
+                JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
+                string updatedJson = JsonSerializer.Serialize(warnings, options);
+                await File.WriteAllTextAsync(warningFile, updatedJson);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("An error occurred while removing old warnings.", ex);
+            }
         }
 
         public static async Task<List<WarningModel>> GetWarnings(ulong guildId, string guildName, ulong userId)
         {
-            await RemoveOldWarnings(guildId, guildName);
-            string warningFile = Path.Combine(warningPath, GetGuildFile(guildId, guildName));
-            if(!File.Exists(warningFile))
-                return new List<WarningModel>();
-            string json = await File.ReadAllTextAsync(warningFile);
-            return JsonSerializer.Deserialize<List<WarningModel>>(json)?
-                .Where(w => w.TargetUserId == userId)
-                .ToList() ?? new List<WarningModel>();
+            try
+            {
+                await RemoveOldWarnings(guildId, guildName);
+                string warningFile = Path.Combine(warningPath, GetGuildFile(guildId, guildName));
+                if (!File.Exists(warningFile))
+                    return new List<WarningModel>();
+                string json = await File.ReadAllTextAsync(warningFile);
+                return JsonSerializer.Deserialize<List<WarningModel>>(json)?
+                    .Where(w => w.TargetUserId == userId)
+                    .ToList() ?? new List<WarningModel>();
+            }
+            catch (Exception ex)
+            {
+                await LogManager.LogException(ex, ExceptionType.ERROR);
+                throw new Exception("An error occurred while retrieving warnings.", ex);
+            }
         }
 
         public static async Task<bool> HasReachedMaxWarnings(ulong guildId, string guildName, ulong userId)
         {
-            List<WarningModel> warnings = await GetWarnings(guildId, guildName, userId);
-            return warnings.Count > MaxWarnings;
+            try
+            {
+                List<WarningModel> warnings = await GetWarnings(guildId, guildName, userId);
+                return warnings.Count > MaxWarnings;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while checking warnings.", ex);
+            }
         }
 
         private static string GetGuildFile(ulong guildId, string guildName)

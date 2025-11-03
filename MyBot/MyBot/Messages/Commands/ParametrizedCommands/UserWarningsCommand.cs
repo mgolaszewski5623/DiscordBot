@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
+using MyBot.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,7 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
             }
             catch (Exception ex)
             {
-                await LogManager.LogException(ex, MyBot.Enums.ExceptionType.INFORMATION);
-                Console.WriteLine($"Error in UserWarningsCommand: {ex.Message}");
+                await LogManager.LogException(ex, ExceptionType.ERROR);
                 return "An error occurred while retrieving user warnings.";
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using MyBot.DataManager;
 using MyBot.Enums;
+using MyBot.Exceptions;
 using MyBot.Extensions;
 using MyBot.Models;
 using System;
@@ -48,11 +49,13 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
                 await KickManager.KickUser(kick);
                 return $"👢 {kick.TargetUserId} has been kicked. Reason: **{kick.Reason}**";
             }
-            catch (Exception ex)
+            catch(MyBotInformationException informationEx)
             {
-                await LogManager.LogException(ex, ExceptionType.INFORMATION);
-                Console.WriteLine($"Error kicking user: {ex.GetCompleteMessage()}");
-                return $"Failed to kick user:";
+                return $"Failed to kick user: {informationEx.Message}";
+            }
+            catch (Exception)
+            {
+                return $"Failed to kick user";
             }
         }
     }

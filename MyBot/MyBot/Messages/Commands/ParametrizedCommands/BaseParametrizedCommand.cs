@@ -22,10 +22,10 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
                     await SendMessage(message, text);
                     break;
                 case Embed embed:
-                    await message.Channel.SendMessageAsync(embed: embed);
+                    await SendMessage(message, embed);
                     break;
                 case (string text, Embed embed):
-                    await message.Channel.SendMessageAsync(text, embed: embed);
+                    await SendMessage(message, text, embed);
                     break;
                 default:
                     await SendMessage(message, "⚠️ Unsupported message type returned by command.");

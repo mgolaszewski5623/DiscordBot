@@ -58,7 +58,6 @@ namespace MyBot.Messages.Commands
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error handling command: {ex.GetCompleteMessage()}");
                 await LogManager.LogException(ex, ExceptionType.ERROR);
             }
         }

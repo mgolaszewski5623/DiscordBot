@@ -19,7 +19,7 @@ namespace MyBot.DataManager
 				SocketGuildUser? user = kick.Guild.GetUser(kick.TargetUserId);
 				SocketGuildUser? moderator = kick.Guild.GetUser(kick.ModeratorId);
                 if (!CheckHierarchy(user, moderator))
-					throw new MyBotException("Cannot kick the user due to role hierarchy.");
+					throw new MyBotInformationException("Cannot kick the user due to role hierarchy.");
                 InformUser(user, kick);
                 await user.KickAsync(string.IsNullOrEmpty(kick.Reason) ? "No reason" : kick.Reason);
 			}
@@ -34,7 +34,7 @@ namespace MyBot.DataManager
         {
             try
             {
-                var dm = await user.CreateDMChannelAsync();
+                Discord.IDMChannel dm = await user.CreateDMChannelAsync();
                 await dm.SendMessageAsync(kick.ToString());
             }
             catch (Exception ex)

@@ -41,20 +41,23 @@ namespace MyBot.Messages.Commands.ParametrizedCommands
                 await confirmationMessage.DeleteAsync();
                 return string.Empty;
             }
+            catch(MyBotInformationException informationEx)
+            {
+                return informationEx.Message;
+            }
             catch (Exception ex)
             {
                 await LogManager.LogException(ex, Enums.ExceptionType.INFORMATION);
-                Console.WriteLine($"Error executing clear command: {ex.GetCompleteMessage()}");
-                return $"{ex.Message}";
+                return $"Occured error during clearing a text channel.";
             }
         }
 
         private static int ValidateCount(string[] args)
         {
             if (args.Length != 1 || !int.TryParse(args[0], out int count))
-                throw new MyBotException("Usage: !clear <number_of_messages>");
+                throw new MyBotInformationException("Usage: !clear <number_of_messages>");
             if (count < 1 || count > MAX_MESSAGES)
-                throw new MyBotException($"Number of messages to delete must be between 1 and {MAX_MESSAGES}.");
+                throw new MyBotInformationException($"Number of messages to delete must be between 1 and {MAX_MESSAGES}.");
             return count;
         }
     }

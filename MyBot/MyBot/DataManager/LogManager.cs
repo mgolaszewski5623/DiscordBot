@@ -19,16 +19,23 @@ namespace MyBot.DataManager
 
         public static async Task LogCommand(SocketMessage message)
         {
-            string fullLogPath = Path.Combine(LOGS_DIRECTORY, COMMANDS_LOG_PATH);
-            PathExtensions.CreateDirectory(fullLogPath);
-            string logFile = Path.Combine(fullLogPath, GetLogFile(message).SanitizeFilePath());
-            string user = message.Author.Username;
-            ulong userId = message.Author.Id;
-            string channel = (message.Channel as SocketTextChannel)?.Name ?? "DM";
-            string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            try
+            {
+                string fullLogPath = Path.Combine(LOGS_DIRECTORY, COMMANDS_LOG_PATH);
+                PathExtensions.CreateDirectory(fullLogPath);
+                string logFile = Path.Combine(fullLogPath, GetLogFile(message).SanitizeFilePath());
+                string user = message.Author.Username;
+                ulong userId = message.Author.Id;
+                string channel = (message.Channel as SocketTextChannel)?.Name ?? "DM";
+                string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-            string logLine = $"[{time}] {user}({userId}) in {channel} : {message.Content}";
-            await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
+                string logLine = $"[{time}] {user}({userId}) in {channel} : {message.Content}";
+                await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                await LogException(ex, ExceptionType.ERROR);
+            }
         }
 
         private static string GetLogFile(SocketMessage message)
@@ -50,12 +57,19 @@ namespace MyBot.DataManager
 
         public static async Task LogException(Exception exception, ExceptionType level = ExceptionType.INFORMATION)
         {
-            string fullLogPath = Path.Combine(LOGS_DIRECTORY, EXCEPTIONS_LOG_PATH);
-            PathExtensions.CreateDirectory(fullLogPath);
-            string logFile = Path.Combine(fullLogPath, GetExceptionLogFile(level).SanitizeFilePath());
-            string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string logLine = $"[{time}] Message: {exception.Message} | StackTrace: {exception.StackTrace}";
-            await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
+            try
+            {
+                string fullLogPath = Path.Combine(LOGS_DIRECTORY, EXCEPTIONS_LOG_PATH);
+                PathExtensions.CreateDirectory(fullLogPath);
+                string logFile = Path.Combine(fullLogPath, GetExceptionLogFile(level).SanitizeFilePath());
+                string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                string logLine = $"[{time}] Message: {exception.GetCompleteMessage()} | StackTrace: {exception.StackTrace}";
+                await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
+            }
+            catch(Exception ex)
+            {
+                // Nothing much we can do if logging error fails
+            }
         }
 
         private static string GetExceptionLogFile(ExceptionType level)
@@ -63,12 +77,19 @@ namespace MyBot.DataManager
 
         public static async Task LogBotLifeCycle(string message)
         {
-            string fullLogPath = Path.Combine(LOGS_DIRECTORY, BOT_LIFECYCLE_LOG_PATH);
-            PathExtensions.CreateDirectory(fullLogPath);
-            string logFile = Path.Combine(fullLogPath, "BotLifecycle.log".SanitizeFilePath());
-            string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            string logLine = $"[{time}] {message}";
-            await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
+            try
+            {
+                string fullLogPath = Path.Combine(LOGS_DIRECTORY, BOT_LIFECYCLE_LOG_PATH);
+                PathExtensions.CreateDirectory(fullLogPath);
+                string logFile = Path.Combine(fullLogPath, "BotLifecycle.log".SanitizeFilePath());
+                string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                string logLine = $"[{time}] {message}";
+                await File.AppendAllTextAsync(logFile, logLine + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                await LogException(ex, ExceptionType.ERROR);
+            }
         }
     }
 }

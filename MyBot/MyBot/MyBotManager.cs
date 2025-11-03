@@ -39,7 +39,6 @@ namespace MyBot
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"Error starting bot: {ex.GetCompleteMessage()}");
                 await LogManager.LogException(ex, ExceptionType.CRITICAL);
             }
         }

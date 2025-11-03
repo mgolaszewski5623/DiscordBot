@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using MyBot.Extensions;
 using System;
 using System.Collections.Generic;
@@ -48,5 +49,11 @@ namespace MyBot.Messages.Commands
 
         protected Task SendMessage(SocketMessage receivedMessage, string messageToSend)
             => receivedMessage.Channel.SendMessageAsync(messageToSend);
+
+        protected Task SendMessage(SocketMessage receivedMessage, Embed embedToSend)
+            => receivedMessage.Channel.SendMessageAsync(embed: embedToSend);
+
+        protected Task SendMessage(SocketMessage receivedMessage, string messageToSend, Embed embedToSend)
+            => receivedMessage.Channel.SendMessageAsync(messageToSend, embed: embedToSend);
     }
 }
